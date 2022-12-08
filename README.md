@@ -136,3 +136,14 @@ Lakukan instalasi Web Server pada server Garden dan SSS (tidak akan dijelaskan d
 iptables -A FORWARD -p tcp -d 192.193.7.138,192.193.7.139 -m multiport --dport 80,443 -m time --timestart 07:00 --timestop 16:00 --weekdays Mon,Tue,Wed,Thu,Fri -j ACCEPT
 iptables -A FORWARD -p tcp -d 192.193.7.138,192.193.7.139 -m multiport --dport 80,443 -j DROP
 ```
+
+Hasil pengujian pada Work hour
+![4a](https://user-images.githubusercontent.com/52820619/206490680-74353ba1-b427-4f2a-ab29-8b3d71ffd93a.png)
+
+Hasil pengujian pada Weekdays non work hour
+![4b](https://user-images.githubusercontent.com/52820619/206490690-5cdfcc69-be28-446c-b2ff-781dfa16ba46.png)
+
+Hasil pengujian pada Weekend
+![4c](https://user-images.githubusercontent.com/52820619/206490693-bf0c77f1-1b8e-4f2f-bd46-2f8aadd8e583.png)
+
+
