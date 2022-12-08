@@ -163,4 +163,13 @@ Hasil pengujian load balancing Garden Port 80
 Hasil pengujian load balancing SSS Port 443
 ![5b](https://user-images.githubusercontent.com/52820619/206492341-4f58e882-0cd3-42a4-ac4f-e79051fb6cce.png)
 
+## Nomor 6 (Logging)
+Untuk setiap node yang menerapkan dropping rule, 
+Tambahkan Chain baru dengan perintah sebagai berikut
+```
+iptables -N LOG_DROP
+iptables -A LOG_DROP -j LOG --log-prefix "IPTABLES:DROP: " --log-level 4
+iptables -A LOG_DROP -j DROP
+```
 
+lalu untuk setiap rule yang jump ke DROP, ganti dengan chain yang baru dibuat yaitu `LOG DROP`
