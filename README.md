@@ -105,3 +105,7 @@ iface eth0 inet dhcp
 ```
 
 Setelah itu, restart client.
+
+## Nomor 1 (Mengakses Internet keluar tanpa MASQUERADE)
+
+gunakan postrouting pada nat table dengan jump ke SNAT, lalu ubah source addressnya menjadi address dari router pada interface yang terhubung ke nat (dalam kasus ini yaitu eth0) menggunakan perintah `iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to-source 192.168.122.10`
