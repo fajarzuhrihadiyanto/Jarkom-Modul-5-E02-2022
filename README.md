@@ -124,3 +124,15 @@ iptables -A INPUT -p udp -j DROP
 
 ![image](https://user-images.githubusercontent.com/52820619/206488747-82c266b0-1558-4c97-b22c-8792c28af8c9.png)
 
+## Noomor 3 (Pembatasan ICMP pada DNS dan DHCP Server)
+
+Gunakan perintah sebagai berikut pada DNS dan DHCP Server `iptables -A INPUT -p icmp -m conntrack --ctstate NEW -m connlimit --connlimit-mask 21 --connlimit-above 2 -j DROP`
+
+## Nomor 4 (Akses Web Server berdasarkan Waktu)
+
+Lakukan instalasi Web Server pada server Garden dan SSS (tidak akan dijelaskan disini). Pada router Ostania (yang terdekat dengan kedua server tsb), tambahkan rule sebagai berikut
+
+```
+iptables -A FORWARD -p tcp -d 192.193.7.138,192.193.7.139 -m multiport --dport 80,443 -m time --timestart 07:00 --timestop 16:00 --weekdays Mon,Tue,Wed,Thu,Fri -j ACCEPT
+iptables -A FORWARD -p tcp -d 192.193.7.138,192.193.7.139 -m multiport --dport 80,443 -j DROP
+```
