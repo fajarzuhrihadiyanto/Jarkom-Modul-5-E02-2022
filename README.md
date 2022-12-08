@@ -109,3 +109,18 @@ Setelah itu, restart client.
 ## Nomor 1 (Mengakses Internet keluar tanpa MASQUERADE)
 
 gunakan postrouting pada nat table dengan jump ke SNAT, lalu ubah source addressnya menjadi address dari router pada interface yang terhubung ke nat (dalam kasus ini yaitu eth0) menggunakan perintah `iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to-source 192.168.122.10`
+
+![1](https://user-images.githubusercontent.com/52820619/206488209-846417ed-9e2f-46c6-8ba6-1b7cf96dc931.png)
+
+## Nomor 2 (Blok semua tcp dan udp dari luar jaringan)
+
+Gunakan perintah sebagai berikut
+
+```
+iptables -A INPUT -m iprange --src-range 192.193.0.0-192.193.7.151 -j ACCEPT
+iptables -A INPUT -p tcp --syn -j DROP
+iptables -A INPUT -p udp -j DROP
+```
+
+![image](https://user-images.githubusercontent.com/52820619/206488747-82c266b0-1558-4c97-b22c-8792c28af8c9.png)
+
