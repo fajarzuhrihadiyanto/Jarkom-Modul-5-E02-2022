@@ -146,4 +146,21 @@ Hasil pengujian pada Weekdays non work hour
 Hasil pengujian pada Weekend
 ![4c](https://user-images.githubusercontent.com/52820619/206490693-bf0c77f1-1b8e-4f2f-bd46-2f8aadd8e583.png)
 
+## Nomor 5 (Load Balancing Garden port 80 dan SSS port 443)
+
+Pada router ostania (router terdekat dengan kedua web server tsb), tambahkan rule sebagai berikut
+```
+iptables -A PREROUTING -t nat -p tcp -d 192.193.7.138 --dport 80 -m  state --state NEW -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.193.7.138
+iptables -A PREROUTING -t nat -p tcp -d 192.193.7.138 --dport 80 -m  state --state NEW -j DNAT --to-destination 192.193.7.139
+
+iptables -A PREROUTING -t nat -p tcp -d 192.193.7.139 --dport 443 -m  state --state NEW -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.193.7.138
+iptables -A PREROUTING -t nat -p tcp -d 192.193.7.139 --dport 443 -m  state --state NEW -j DNAT --to-destination 192.193.7.139
+```
+
+Hasil pengujian load balancing Garden Port 80
+![5a](https://user-images.githubusercontent.com/52820619/206492329-e5c77196-d45a-4e81-9f82-97d82b8ff2c4.png)
+
+Hasil pengujian load balancing SSS Port 443
+![5b](https://user-images.githubusercontent.com/52820619/206492341-4f58e882-0cd3-42a4-ac4f-e79051fb6cce.png)
+
 
