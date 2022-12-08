@@ -25,3 +25,83 @@ Subnetting menggunakan VLSM
 ### Routing Pada Ostanis
 
 ![C3](https://user-images.githubusercontent.com/52820619/206483932-06822267-a5a0-4e9e-8306-84829caca6d4.png)
+
+## D (Dynamic IP)
+
+### Konfigurasi DHCP Server
+
+Pada server WISE yang berperan sebagai DHCP server, lakukan instalasi dhcp server dengan perintah `apt-get update`, lalu `apt-get install isc-dhcp-server -y`. Setelah itu, buka file `/etc/default/isc-dhcp-server`, lalu masukkan line berikut
+```
+INTERFACES="eth0"
+```
+
+lalu buka file `/etc/dhcp/dhcpd.conf`, lalu tambahkan line berikut
+```
+subnet 192.193.0.0 netmask 255.255.252.0 {
+    range 192.193.0.2 192.193.3.254;
+    option routers 192.193.0.1;
+    option broadcast-address 192.193.3.255;
+    option domain-name-servers 192.193.7.131;
+    default-lease-time 300;
+    max-lease-time 6900;
+}
+
+subnet 192.193.4.0 netmask 255.255.254.0 {
+    range 192.193.4.2 192.193.5.254;
+    option routers 192.193.4.1;
+    option broadcast-address 192.193.5.255;
+    option domain-name-servers 192.193.7.131;
+    default-lease-time 300;
+    max-lease-time 6900;
+}
+
+subnet 192.193.6.0 netmask 255.255.255.0 {
+    range 192.193.6.2 192.193.6.254;
+    option routers 192.193.6.1;
+    option broadcast-address 192.193.6.255;
+    option domain-name-servers 192.193.7.131;
+    default-lease-time 300;
+    max-lease-time 6900;
+}
+
+subnet 192.193.7.0 netmask 255.255.255.128 {
+    range 192.193.7.2 192.193.7.126;
+    option routers 192.193.7.1;
+    option broadcast-address 192.193.7.127;
+    option domain-name-servers 192.193.7.131;
+    default-lease-time 300;
+    max-lease-time 6900;
+}
+
+subnet 192.193.7.128 netmask 255.255.255.248 {
+}
+
+subnet 192.193.7.144 netmask 255.255.255.252 {
+}
+
+subnet 192.193.7.148 netmask 255.255.255.252 {
+}
+```
+
+lalu, lakukan restart dhcp server dengan perintah `service isc-dhcp-server restart`
+
+### Konfigurasi DHCP Relay
+
+Untuk setiap router yang berperan sebagai DHCP relay (dalam hal ini yaitu semua router), lakukan instalasi dhcp relay dengan perintah `apt-get update`, lalu `apt-get install isc-dhcp-relay`, untuk opsi2 yang diminta, kosongkan saja terlebih dahulu. Setelah itu buka file `/etc/default/isc-dhcp-relay`, lalu tambahkan line berikut
+```
+SERVERS="192.193.7.130"
+INTERFACES="eth1 eth2"
+OPTIONS=""
+```
+
+Setelah itu, restart dhcp relay dengan perintah `service isc-dhcp-relay restart`
+
+### Konfigurasi IP Client
+
+Pada client, lakukan konfigurasi ip sebagai berikut
+```
+auto eth0
+iface eth0 inet dhcp
+```
+
+Setelah itu, restart client.
